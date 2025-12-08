@@ -1,0 +1,12 @@
+# Core dependencies
+python-dotenv>=1.0.0
+
+# Data validation with Pydantic
+pydantic>=2.5.0
+pydantic-settings>=2.0.0
+
+# Rich UI for professional console output
+rich>=13.7.0
+
+# Type extensions for Python 3.7-3.8 compatibility
+typing-extensions>=4.8.0
