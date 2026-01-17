@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Nombre del archivo: prompts.py
-Descripción: Prompts interactivos para capturar entrada del usuario mediante Rich,
-             incluyendo parámetros de búsqueda, consultas salariales y confirmaciones.
+File: prompts.py
+Description: Interactive prompts to capture user input via Rich,
+             including search parameters, salary queries, and confirmations.
 
-Autor: Hex686f6c61
-Repositorio: https://github.com/Hex686f6c61/linkedIN-Scraper
-Versión: 3.0.0
-Fecha: 2025-12-08
+Author: Hex686f6c61
+Repository: https://github.com/Hex686f6c61/linkedIN-Scraper
+Version: 3.0.0
+Date: 2025-12-08
 """
 from typing import Tuple, Dict
 from rich.prompt import Prompt, Confirm, IntPrompt
@@ -17,44 +17,44 @@ from src.models.search_params import SearchParameters
 
 
 class Prompts:
-    """Manejadores de input interactivos"""
+    """Interactive input handlers"""
 
     def __init__(self, console: Console):
         """
         Args:
-            console: Console de Rich
+            console: Rich Console
         """
         self.console = console
 
     def get_custom_search_params(self) -> SearchParameters:
         """
-        Obtiene parámetros de búsqueda personalizados del usuario
+        Get custom search parameters from user
 
         Returns:
-            SearchParameters validado
+            Validated SearchParameters
         """
-        self.console.print_header("CONFIGURACIÓN DE BÚSQUEDA PERSONALIZADA")
+        self.console.print_header("CUSTOM SEARCH CONFIGURATION")
 
-        # Query de búsqueda
-        query = Prompt.ask("\n[cyan]Búsqueda[/cyan] (ej: 'python developer madrid')")
+        # Search query
+        query = Prompt.ask("\n[cyan]Search Query[/cyan] (e.g., 'python developer madrid')")
 
-        # País
+        # Country
         country = Prompt.ask(
-            "[cyan]Código de país[/cyan] (ej: es, us, mx)",
+            "[cyan]Country Code[/cyan] (e.g., es, us, mx)",
             default="us",
             show_default=True
         )
 
-        # Período de publicación
-        self.console.console.print("\n[bold]Período de publicación:[/bold]")
-        self.console.console.print("  1. Todos")
-        self.console.console.print("  2. Hoy")
-        self.console.console.print("  3. Últimos 3 días")
-        self.console.console.print("  4. Última semana")
-        self.console.console.print("  5. Último mes")
+        # Publication period
+        self.console.console.print("\n[bold]Publication Period:[/bold]")
+        self.console.console.print("  1. All")
+        self.console.console.print("  2. Today")
+        self.console.console.print("  3. Last 3 Days")
+        self.console.console.print("  4. Last Week")
+        self.console.console.print("  5. Last Month")
 
         periodo_choice = Prompt.ask(
-            "[cyan]Selecciona período[/cyan]",
+            "[cyan]Select Period[/cyan]",
             choices=["1", "2", "3", "4", "5"],
             default="1"
         )
@@ -65,27 +65,27 @@ class Prompts:
         }
         date_posted = periodos[periodo_choice]
 
-        # Trabajo remoto
-        work_from_home = Confirm.ask("\n[cyan]¿Solo trabajos remotos?[/cyan]", default=False)
+        # Remote work only
+        work_from_home = Confirm.ask("\n[cyan]Remote jobs only?[/cyan]", default=False)
 
-        # Tipo de empleo
-        self.console.console.print("\n[dim]Tipos de empleo (opcional): FULLTIME, PARTTIME, CONTRACTOR, INTERN[/dim]")
+        # Employment type
+        self.console.console.print("\n[dim]Employment Types (optional): FULLTIME, PARTTIME, CONTRACTOR, INTERN[/dim]")
         employment_types = Prompt.ask(
-            "[cyan]Tipo de empleo[/cyan] (deja vacío para todos)",
+            "[cyan]Employment Type[/cyan] (leave empty for all)",
             default="",
             show_default=False
         )
         employment_types = employment_types.strip() if employment_types else None
 
-        # Número de páginas
+        # Number of pages
         num_pages = IntPrompt.ask(
-            "\n[cyan]Número de páginas[/cyan] (1-10)",
+            "\n[cyan]Number of Pages[/cyan] (1-10)",
             default=1,
             show_default=True
         )
-        num_pages = max(1, min(10, num_pages))  # Limitar entre 1 y 10
+        num_pages = max(1, min(10, num_pages))  # Limit between 1 and 10
 
-        # Crear y validar parámetros
+        # Create and validate parameters
         try:
             params = SearchParameters(
                 query=query,
@@ -97,21 +97,21 @@ class Prompts:
             )
             return params
         except Exception as e:
-            self.console.print_error(f"Error en parámetros: {e}")
+            self.console.print_error(f"Error in parameters: {e}")
             raise
 
     def get_job_id_input(self) -> Tuple[str, str]:
         """
-        Solicita Job ID y país al usuario
+        Request Job ID and country from user
 
         Returns:
-            Tupla (job_id, country)
+            Tuple (job_id, country)
         """
-        self.console.print_header("OBTENER DETALLES DE TRABAJO")
+        self.console.print_header("GET JOB DETAILS")
 
         job_id = Prompt.ask("\n[cyan]Job ID[/cyan]")
         country = Prompt.ask(
-            "[cyan]Código de país[/cyan]",
+            "[cyan]Country Code[/cyan]",
             default="us",
             show_default=True
         )
@@ -120,17 +120,17 @@ class Prompts:
 
     def get_salary_estimate_params(self) -> Dict[str, str]:
         """
-        Obtiene parámetros para estimación salarial
+        Get parameters for salary estimation
 
         Returns:
-            Diccionario con parámetros
+            Dictionary with parameters
         """
-        self.console.print_header("CONSULTAR SALARIOS ESTIMADOS")
+        self.console.print_header("VIEW ESTIMATED SALARIES")
 
-        job_title = Prompt.ask("\n[cyan]Título del puesto[/cyan] (ej: 'Software Engineer')")
-        location = Prompt.ask("[cyan]Ubicación[/cyan] (ej: 'Madrid, Spain' o 'New York, NY')")
+        job_title = Prompt.ask("\n[cyan]Job Title[/cyan] (e.g., 'Software Engineer')")
+        location = Prompt.ask("[cyan]Location[/cyan] (e.g., 'Madrid, Spain' or 'New York, NY')")
 
-        # Menú de experiencia
+        # Experience menu
         years_of_experience = self._get_experience_level()
 
         return {
@@ -141,24 +141,24 @@ class Prompts:
 
     def get_company_salary_params(self) -> Dict[str, str]:
         """
-        Obtiene parámetros para salarios de empresa
+        Get parameters for company salaries
 
         Returns:
-            Diccionario con parámetros
+            Dictionary with parameters
         """
-        self.console.print_header("CONSULTAR SALARIOS DE EMPRESA")
+        self.console.print_header("VIEW COMPANY SALARIES")
 
-        company = Prompt.ask("\n[cyan]Empresa[/cyan] (ej: 'Google', 'Amazon')")
-        job_title = Prompt.ask("[cyan]Título del puesto[/cyan] (ej: 'Software Engineer')")
+        company = Prompt.ask("\n[cyan]Company[/cyan] (e.g., 'Google', 'Amazon')")
+        job_title = Prompt.ask("[cyan]Job Title[/cyan] (e.g., 'Software Engineer')")
 
         location = Prompt.ask(
-            "[cyan]Ubicación[/cyan] (opcional, presiona ENTER para omitir)",
+            "[cyan]Location[/cyan] (optional, press ENTER to skip)",
             default="",
             show_default=False
         )
         location = location.strip() if location else None
 
-        # Menú de experiencia
+        # Experience menu
         years_of_experience = self._get_experience_level()
 
         return {
@@ -170,21 +170,21 @@ class Prompts:
 
     def _get_experience_level(self) -> str:
         """
-        Muestra menú de nivel de experiencia
+        Display experience level menu
 
         Returns:
-            Código de experiencia
+            Experience code
         """
-        self.console.console.print("\n[bold]Años de experiencia:[/bold]")
-        self.console.console.print("  1. Todos (ALL)")
-        self.console.console.print("  2. Menos de 1 año")
-        self.console.console.print("  3. 1-3 años")
-        self.console.console.print("  4. 4-6 años")
-        self.console.console.print("  5. 7-9 años")
-        self.console.console.print("  6. 10+ años")
+        self.console.console.print("\n[bold]Years of Experience:[/bold]")
+        self.console.console.print("  1. All (ALL)")
+        self.console.console.print("  2. Less than 1 year")
+        self.console.console.print("  3. 1-3 years")
+        self.console.console.print("  4. 4-6 years")
+        self.console.console.print("  5. 7-9 years")
+        self.console.console.print("  6. 10+ years")
 
         exp_choice = Prompt.ask(
-            "[cyan]Selecciona nivel[/cyan]",
+            "[cyan]Select Level[/cyan]",
             choices=["1", "2", "3", "4", "5", "6"],
             default="1"
         )
@@ -200,14 +200,14 @@ class Prompts:
 
         return experience_map[exp_choice]
 
-    def confirm_save(self, prompt_text: str = "¿Guardar resultados?") -> bool:
+    def confirm_save(self, prompt_text: str = "Save results?") -> bool:
         """
-        Pregunta al usuario si desea guardar
+        Ask user if they want to save
 
         Args:
-            prompt_text: Texto del prompt
+            prompt_text: Prompt text
 
         Returns:
-            True si el usuario confirma
+            True if user confirms
         """
         return Confirm.ask(f"[yellow]{prompt_text}[/yellow]", default=True)

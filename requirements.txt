@@ -10,3 +10,9 @@ rich>=13.7.0
 
 # Type extensions for Python 3.7-3.8 compatibility
 typing-extensions>=4.8.0
+# Web Framework
+flask>=2.3.0
+flask-cors>=4.0.0
+
+# HTTP requests
+requests>=2.31.0

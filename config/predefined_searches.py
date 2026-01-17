@@ -1,87 +1,86 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Nombre del archivo: predefined_searches.py
-Descripción: Búsquedas predefinidas para el menú principal del scraper.
-             Incluye búsquedas comunes de roles tech en diferentes países y modalidades.
+File: predefined_searches.py
+Description: Predefined searches for Indian job market.
+             Includes common tech role searches across major Indian cities.
 
-Autor: Hex686f6c61
-Repositorio: https://github.com/Hex686f6c61/linkedIN-Scraper
-Versión: 3.0.0
-Fecha: 2025-12-08
+Author: Hex686f6c61
+Repository: https://github.com/Hex686f6c61/linkedIN-Scraper
+Version: 3.0.0
+Date: 2025-12-08
 """
 from src.models.search_params import SearchParameters
 
 
-# Diccionario de búsquedas predefinidas
+# Dictionary of predefined searches - India focused
 PREDEFINED_SEARCHES = {
     "2": SearchParameters(
-        query="project manager scrum agile",
-        country="es",
+        query="software engineer india bangalore",
+        country="in",
         employment_types="FULLTIME",
         date_posted="week"
     ),
     "3": SearchParameters(
-        query="software engineer",
-        country="es",
+        query="data scientist machine learning india",
+        country="in",
         employment_types="FULLTIME",
         date_posted="week"
     ),
     "4": SearchParameters(
-        query="data scientist python machine learning",
-        country="es",
+        query="frontend developer react angular india",
+        country="in",
         employment_types="FULLTIME",
         date_posted="week"
     ),
     "5": SearchParameters(
-        query="frontend developer react javascript",
-        country="es",
+        query="backend developer python java india",
+        country="in",
         employment_types="FULLTIME",
         date_posted="week"
     ),
     "6": SearchParameters(
-        query="backend developer python java",
-        country="us",
+        query="devops engineer kubernetes docker india",
+        country="in",
         employment_types="FULLTIME",
         date_posted="week"
     ),
     "7": SearchParameters(
-        query="machine learning engineer tensorflow pytorch",
-        country="us",
-        employment_types="FULLTIME",
-        date_posted="3days"
-    ),
-    "8": SearchParameters(
-        query="full stack developer node react python",
-        country="us",
+        query="full stack developer nodejs react india",
+        country="in",
         employment_types="FULLTIME",
         date_posted="week"
     ),
+    "8": SearchParameters(
+        query="machine learning engineer tensorflow india",
+        country="in",
+        employment_types="FULLTIME",
+        date_posted="3days"
+    ),
     "9": SearchParameters(
-        query="devops engineer kubernetes docker aws",
-        country="gb",
+        query="project manager scrum agile india",
+        country="in",
         employment_types="FULLTIME",
         date_posted="week"
     ),
     "10": SearchParameters(
-        query="senior software engineer remote",
-        country="us",
-        work_from_home=True,
+        query="cloud engineer aws gcp azure india",
+        country="in",
         employment_types="FULLTIME",
         date_posted="week"
     )
 }
 
 
-# Títulos descriptivos para cada búsqueda
+# Descriptive titles for each search
 SEARCH_TITLES = {
-    "2": "Project Manager en España",
-    "3": "Software Engineer en España",
-    "4": "Data Scientist en España",
-    "5": "Frontend Developer en España",
-    "6": "Backend Developer en Estados Unidos",
-    "7": "Machine Learning Engineer en Estados Unidos",
-    "8": "Full Stack Developer en Estados Unidos",
-    "9": "DevOps Engineer en Reino Unido",
-    "10": "Senior Software Engineer - Remoto Global"
+    "2": "Software Engineer - India (Bangalore)",
+    "3": "Data Scientist - India (Machine Learning)",
+    "4": "Frontend Developer - India (React/Angular)",
+    "5": "Backend Developer - India (Python/Java)",
+    "6": "DevOps Engineer - India (Kubernetes)",
+    "7": "Full Stack Developer - India (Node.js)",
+    "8": "Machine Learning Engineer - India",
+    "9": "Project Manager - India (Scrum/Agile)",
+    "10": "Cloud Engineer - India (AWS/GCP/Azure)"
 }

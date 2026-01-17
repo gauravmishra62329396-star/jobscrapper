@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Nombre del archivo: console.py
-Descripción: Wrapper personalizado de Rich Console para proporcionar salida
-             coloreada y formateada en la terminal con temas y métodos de conveniencia.
+File: console.py
+Description: Custom wrapper of Rich Console to provide colorful and formatted
+             output in the terminal with themes and convenience methods.
 
-Autor: Hex686f6c61
-Repositorio: https://github.com/Hex686f6c61/linkedIN-Scraper
-Versión: 3.0.0
-Fecha: 2025-12-08
+Author: Hex686f6c61
+Repository: https://github.com/Hex686f6c61/linkedIN-Scraper
+Version: 3.0.0
+Date: 2025-12-08
 """
 from rich.console import Console as RichConsole
 from rich.theme import Theme
 
 
-# Tema personalizado
+# Custom theme
 custom_theme = Theme({
     "success": "bold green",
     "error": "bold red",
@@ -26,39 +26,39 @@ custom_theme = Theme({
 
 
 class Console:
-    """Wrapper de Rich Console con métodos de conveniencia"""
+    """Wrapper of Rich Console with convenience methods"""
 
     def __init__(self):
         self.console = RichConsole(theme=custom_theme)
 
     def print_success(self, message: str):
-        """Imprime mensaje de éxito"""
-        self.console.print(f"[success][OK][/success] {message}")
+        """Print success message"""
+        self.console.print(f"[success][✓][/success] {message}")
 
     def print_error(self, message: str):
-        """Imprime mensaje de error"""
-        self.console.print(f"[error][ERROR][/error] {message}")
+        """Print error message"""
+        self.console.print(f"[error][✗][/error] {message}")
 
     def print_warning(self, message: str):
-        """Imprime mensaje de advertencia"""
-        self.console.print(f"[warning][AVISO][/warning] {message}")
+        """Print warning message"""
+        self.console.print(f"[warning][!][/warning] {message}")
 
     def print_info(self, message: str):
-        """Imprime mensaje informativo"""
-        self.console.print(f"[info][INFO][/info] {message}")
+        """Print informational message"""
+        self.console.print(f"[info][ℹ][/info] {message}")
 
     def print_header(self, title: str):
-        """Imprime encabezado con línea decorativa"""
+        """Print header with decorative line"""
         self.console.rule(f"[bold]{title}[/bold]")
 
     def print_separator(self):
-        """Imprime línea separadora"""
+        """Print separator line"""
         self.console.print("─" * 80, style="dim")
 
     def print(self, *args, **kwargs):
-        """Wrapper para print de Rich Console"""
+        """Wrapper for Rich Console print"""
         self.console.print(*args, **kwargs)
 
     def clear(self):
-        """Limpia la consola"""
+        """Clear console"""
         self.console.clear()

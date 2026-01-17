@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Nombre del archivo: main.py
-Descripción: Punto de entrada principal de la aplicación LinkedIn Job Scraper.
-             Gestiona la interfaz de usuario, servicios de búsqueda de empleos
-             y coordinación de todas las funcionalidades del scraper.
+File: main.py
+Description: Main entry point of the LinkedIn Job Scraper application.
+             Manages the user interface, job search services
+             and coordination of all scraper functionalities.
 
-Autor: Hex686f6c61
-Repositorio: https://github.com/Hex686f6c61/linkedIN-Scraper
-Versión: 3.0.0
-Fecha: 2025-12-08
+Author: Hex686f6c61
+Repository: https://github.com/Hex686f6c61/linkedIN-Scraper
+Version: 3.0.0
+Date: 2025-12-08
 """
 import sys
 from src.utils.config import Config
@@ -27,197 +27,197 @@ from config.predefined_searches import PREDEFINED_SEARCHES, SEARCH_TITLES
 
 def handle_custom_search(job_service, export_service, prompts, console):
     """
-    Maneja búsqueda personalizada del usuario
+    Handle custom job search from user
 
     Args:
-        job_service: Servicio de trabajos
-        export_service: Servicio de exportación
-        prompts: Manejador de prompts
-        console: Console de Rich
+        job_service: Job service
+        export_service: Export service
+        prompts: Prompts handler
+        console: Rich console
     """
     try:
-        # Obtener parámetros
+        # Get parameters
         params = prompts.get_custom_search_params()
 
-        # Buscar trabajos con spinner
-        with console.console.status("[bold green]Buscando trabajos...", spinner="dots"):
+        # Search for jobs with spinner
+        with console.console.status("[bold green]Searching for jobs...", spinner="dots"):
             jobs = job_service.search_jobs(params)
 
         if jobs:
-            # Mostrar tabla con Rich
+            # Display table with Rich
             table = JobFormatter.format_job_table(jobs)
             console.console.print("\n")
             console.console.print(table)
 
-            console.print_success(f"Se encontraron {len(jobs)} trabajos")
+            console.print_success(f"Found {len(jobs)} jobs")
 
-            # Guardar resultados
-            if prompts.confirm_save("¿Guardar resultados a archivos?"):
+            # Save results
+            if prompts.confirm_save("Save results to files?"):
                 csv_path = export_service.export_jobs_to_csv(jobs, params.query)
                 json_path = export_service.export_jobs_to_json(jobs, params.query)
                 console.print_success(f"CSV: {csv_path.name}")
                 console.print_success(f"JSON: {json_path.name}")
         else:
-            console.print_warning("No se encontraron trabajos con estos criterios")
+            console.print_warning("No jobs found with these criteria")
 
     except Exception as e:
-        console.print_error(f"Error en búsqueda: {e}")
+        console.print_error(f"Search error: {e}")
 
 
 def handle_predefined_search(choice, job_service, export_service, console):
     """
-    Maneja búsquedas predefinidas
+    Handle predefined searches
 
     Args:
-        choice: Opción seleccionada
-        job_service: Servicio de trabajos
-        export_service: Servicio de exportación
-        console: Console de Rich
+        choice: Selected option
+        job_service: Job service
+        export_service: Export service
+        console: Rich console
     """
     try:
         params = PREDEFINED_SEARCHES[choice]
         title = SEARCH_TITLES[choice]
 
-        console.print_info(f"Ejecutando búsqueda: {title}")
+        console.print_info(f"Running search: {title}")
 
-        # Buscar trabajos con spinner
-        with console.console.status("[bold green]Buscando...", spinner="dots"):
+        # Search for jobs with spinner
+        with console.console.status("[bold green]Searching...", spinner="dots"):
             jobs = job_service.search_jobs(params)
 
         if jobs:
-            # Mostrar tabla
+            # Display table
             table = JobFormatter.format_job_table(jobs)
             console.console.print("\n")
             console.console.print(table)
 
-            # Guardar automáticamente
+            # Auto save
             csv_path = export_service.export_jobs_to_csv(jobs, params.query)
-            console.print_success(f"Guardado en: {csv_path.name}")
+            console.print_success(f"Saved to: {csv_path.name}")
         else:
-            console.print_warning("No se encontraron trabajos")
+            console.print_warning("No jobs found")
 
     except Exception as e:
-        console.print_error(f"Error en búsqueda: {e}")
+        console.print_error(f"Search error: {e}")
 
 
 def handle_job_details(job_service, export_service, prompts, console):
     """
-    Maneja obtención de detalles de trabajo
+    Handle job details retrieval
 
     Args:
-        job_service: Servicio de trabajos
-        export_service: Servicio de exportación
-        prompts: Manejador de prompts
-        console: Console de Rich
+        job_service: Job service
+        export_service: Export service
+        prompts: Prompts handler
+        console: Rich console
     """
     try:
-        # Obtener job_id
+        # Get job_id
         job_id, country = prompts.get_job_id_input()
 
-        # Obtener detalles con spinner
-        with console.console.status("[bold green]Obteniendo detalles...", spinner="dots"):
+        # Get details with spinner
+        with console.console.status("[bold green]Fetching details...", spinner="dots"):
             job = job_service.get_job_details(job_id, country)
 
-        # Mostrar panel con detalles
+        # Display panel with details
         panel = JobFormatter.format_job_details(job)
         console.console.print("\n")
         console.console.print(panel)
 
-        # Guardar si el usuario quiere
-        if prompts.confirm_save("¿Guardar detalles?"):
+        # Save if user wants
+        if prompts.confirm_save("Save details?"):
             csv_path = export_service.export_jobs_to_csv([job], f"job_details_{job_id[:8]}")
-            console.print_success(f"Guardado en: {csv_path.name}")
+            console.print_success(f"Saved to: {csv_path.name}")
 
     except Exception as e:
-        console.print_error(f"Error obteniendo detalles: {e}")
+        console.print_error(f"Error fetching details: {e}")
 
 
 def handle_salary_estimate(salary_service, export_service, prompts, console):
     """
-    Maneja estimación de salarios
+    Handle salary estimation
 
     Args:
-        salary_service: Servicio de salarios
-        export_service: Servicio de exportación
-        prompts: Manejador de prompts
-        console: Console de Rich
+        salary_service: Salary service
+        export_service: Export service
+        prompts: Prompts handler
+        console: Rich console
     """
     try:
-        # Obtener parámetros
+        # Get parameters
         params = prompts.get_salary_estimate_params()
 
-        # Consultar salarios con spinner
-        with console.console.status("[bold green]Consultando salarios...", spinner="dots"):
+        # Query salaries with spinner
+        with console.console.status("[bold green]Querying salaries...", spinner="dots"):
             salaries = salary_service.get_estimated_salary(**params)
 
         if salaries:
-            # Mostrar tabla
+            # Display table
             table = SalaryFormatter.format_salary_table(salaries)
             console.console.print("\n")
             console.console.print(table)
 
-            console.print_success(f"Encontrados {len(salaries)} datos salariales")
+            console.print_success(f"Found {len(salaries)} salary records")
 
-            # Guardar si el usuario quiere
-            if prompts.confirm_save("¿Guardar información salarial?"):
+            # Save if user wants
+            if prompts.confirm_save("Save salary information?"):
                 json_path = export_service.export_salaries_to_json(
                     salaries,
                     f"salary_{params['job_title']}"
                 )
-                console.print_success(f"Guardado en: {json_path.name}")
+                console.print_success(f"Saved to: {json_path.name}")
         else:
-            console.print_warning("No se encontró información de salarios")
+            console.print_warning("No salary information found")
 
     except Exception as e:
-        console.print_error(f"Error consultando salarios: {e}")
+        console.print_error(f"Error querying salaries: {e}")
 
 
 def handle_company_salary(salary_service, export_service, prompts, console):
     """
-    Maneja consulta de salarios de empresa
+    Handle company salary query
 
     Args:
-        salary_service: Servicio de salarios
-        export_service: Servicio de exportación
-        prompts: Manejador de prompts
-        console: Console de Rich
+        salary_service: Salary service
+        export_service: Export service
+        prompts: Prompts handler
+        console: Rich console
     """
     try:
-        # Obtener parámetros
+        # Get parameters
         params = prompts.get_company_salary_params()
 
-        # Consultar salarios con spinner
+        # Query salaries with spinner
         company_name = params['company']
         with console.console.status(
-            f"[bold green]Consultando salarios de {company_name}...",
+            f"[bold green]Querying salaries for {company_name}...",
             spinner="dots"
         ):
             salaries = salary_service.get_company_salary(**params)
 
         if salaries:
-            # Mostrar tabla
+            # Display table
             table = SalaryFormatter.format_salary_table(salaries)
             console.console.print("\n")
             console.console.print(table)
 
-            console.print_success(f"Encontrados {len(salaries)} datos salariales")
+            console.print_success(f"Found {len(salaries)} salary records")
 
-            # Guardar si el usuario quiere
-            if prompts.confirm_save("¿Guardar información salarial?"):
+            # Save if user wants
+            if prompts.confirm_save("Save salary information?"):
                 json_path = export_service.export_salaries_to_json(
                     salaries,
                     f"company_salary_{company_name}"
                 )
-                console.print_success(f"Guardado en: {json_path.name}")
+                console.print_success(f"Saved to: {json_path.name}")
         else:
-            console.print_warning(f"No se encontró información de salarios para {company_name}")
+            console.print_warning(f"No salary information found for {company_name}")
 
     except Exception as e:
-        console.print_error(f"Error consultando salarios: {e}")
+        console.print_error(f"Error querying salaries: {e}")
 
 
 def main():
-    """Función principal de la aplicación"""
+    """Main application function"""
     console = Console()
 
     # Banner
@@ -225,81 +225,81 @@ def main():
     console.console.print("[bold magenta]                   LINKEDIN JOB SCRAPER v3.0.0                         [/bold magenta]")
     console.console.print("[bold cyan]═══════════════════════════════════════════════════════════════════════[/bold cyan]\n")
 
-    # Cargar configuración
+    # Load configuration
     try:
         config = Config.load()
         logger = setup_logger(
             level=config.log_level,
             log_dir=config.log_dir,
             log_to_file=config.log_to_file,
-            log_to_console=False  # Evitar duplicados con Rich
+            log_to_console=False  # Avoid duplicates with Rich
         )
-        logger.info("LinkedIn Job Scraper v3.0.0 iniciado")
+        logger.info("LinkedIn Job Scraper v3.0.0 started")
 
     except Exception as e:
-        console.print_error(f"Error en configuración: {e}")
-        console.console.print("\n[yellow]Verifica tu archivo .env[/yellow]")
-        console.console.print("[dim]Copia .env.example a .env y configura tu API_KEY[/dim]\n")
+        console.print_error(f"Configuration error: {e}")
+        console.console.print("\n[yellow]Verify your .env file[/yellow]")
+        console.console.print("[dim]Copy .env.example to .env and configure your API_KEY[/dim]\n")
         return
 
-    # Inicializar servicios
+    # Initialize services
     try:
         api_client = JSearchClient(config.api_key, config.api_host, config)
         job_service = JobService(api_client)
         salary_service = SalaryService(api_client)
         export_service = ExportService(config.output_dir)
 
-        console.print_success("Servicios inicializados correctamente")
-        console.print_info(f"Conectado a: {config.api_host}")
+        console.print_success("Services initialized successfully")
+        console.print_info(f"Connected to: {config.api_host}")
 
     except Exception as e:
-        console.print_error(f"Error inicializando servicios: {e}")
-        logger.error(f"Error fatal: {e}", exc_info=True)
+        console.print_error(f"Error initializing services: {e}")
+        logger.error(f"Fatal error: {e}", exc_info=True)
         return
 
-    # Inicializar UI
+    # Initialize UI
     menu = MenuSystem(console)
     prompts = Prompts(console)
 
-    # Loop principal
+    # Main loop
     while True:
         try:
             choice = menu.show_main_menu()
 
             if choice == "0":
-                console.print_info("¡Hasta luego! Gracias por usar LinkedIn Job Scraper")
-                logger.info("Aplicación finalizada por el usuario")
+                console.print_info("Goodbye! Thank you for using LinkedIn Job Scraper")
+                logger.info("Application closed by user")
                 break
 
             elif choice == "1":
-                # Búsqueda personalizada
+                # Custom search
                 handle_custom_search(job_service, export_service, prompts, console)
 
             elif choice in PREDEFINED_SEARCHES:
-                # Búsquedas predefinidas
+                # Predefined searches
                 handle_predefined_search(choice, job_service, export_service, console)
 
             elif choice == "11":
-                # Obtener detalles de trabajo
+                # Get job details
                 handle_job_details(job_service, export_service, prompts, console)
 
             elif choice == "12":
-                # Consultar salarios estimados
+                # View estimated salaries
                 handle_salary_estimate(salary_service, export_service, prompts, console)
 
             elif choice == "13":
-                # Consultar salarios de empresa
+                # View company salaries
                 handle_company_salary(salary_service, export_service, prompts, console)
 
-            # Pausa antes de mostrar menú de nuevo
+            # Pause before showing menu again
             menu.wait_for_enter()
 
         except KeyboardInterrupt:
-            console.print_warning("\nOperación cancelada por el usuario")
+            console.print_warning("\nOperation canceled by user")
             continue
         except Exception as e:
-            console.print_error(f"Error inesperado: {e}")
-            logger.error(f"Error en loop principal: {e}", exc_info=True)
+            console.print_error(f"Unexpected error: {e}")
+            logger.error(f"Error in main loop: {e}", exc_info=True)
             menu.wait_for_enter()
 
 
@@ -307,10 +307,10 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print("\n\n[AVISO] Programa interrumpido por el usuario")
-        print("Hasta luego")
+        print("\n\n[!] Program interrupted by user")
+        print("Goodbye!")
         sys.exit(0)
     except Exception as e:
-        print(f"\n[ERROR] Error fatal: {e}")
-        print("Por favor verifica tu configuración y conexión a internet")
+        print(f"\n[ERROR] Fatal error: {e}")
+        print("Please verify your configuration and internet connection")
         sys.exit(1)
